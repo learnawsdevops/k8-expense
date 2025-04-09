@@ -31,6 +31,7 @@ spec:
       containers:
       - name: backend
         image: hitesh2201/backend:v1
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         envFrom:
