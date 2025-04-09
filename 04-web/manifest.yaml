@@ -50,10 +50,12 @@ spec:
         configMap:
           name: web
 ---
+apiVersion: v1
 kind: Service
 metadata:
   name: web
 spec:
+  type: LoadBalancer
   selector:
     name: web
     project: roboshop
