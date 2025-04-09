@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Secret
+metadata:
+ name: mysql
+data:
+  password: RXhwZW5zZUFwcEAx
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    name: mysql
+    project: roboshop
+    tier: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mysql
+      project: roboshop
+      tier: db
+  template:
+    metadata:
+      labels:
+        name: mysql
+        project: roboshop
+        tier: db
+    spec:
+      containers:
+      - name: mysql
+        image: hitesh2201/mysql:v1
+        ports:
+        - containerPort: 3306
+        envFrom:
+        - secretRef:
+            name: mysql
+---
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    name: mysql
+    project: roboshop
+    tier: db
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
