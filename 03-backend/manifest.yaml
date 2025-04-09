@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend
+data:
+  DB_HOST: "mysql"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    name: backend
+    project: roboshop
+    tier: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: backend
+      project: roboshop
+      tier: app
+  template:
+    metadata:
+      labels:
+        name: backend
+        project: roboshop
+        tier: app
+    spec:
+      containers:
+      - name: backend
+        image: hitesh2201/backend:v1
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: backend
+---
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    name: backend
+    project: roboshop
+    tier: app
+  ports:
+  - name: backend
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
